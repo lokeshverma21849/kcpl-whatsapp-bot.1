@@ -3,14 +3,14 @@ const qrcode = require('qrcode-terminal');
 const cron = require('node-cron');
 const fs = require('fs');
 
-const MY_NUMBER = '917985341275@c.us'; // 🚨 APNA WHATSAPP NUMBER CHECK/ENTER KAREIN
+const MY_NUMBER = '917985341275@c.us'; // 🚨 APNA WHATSAPP NUMBER CHECK/ENTER KAREIN (e.g. 919876543210@c.us)
 const DB_FILE = 'castings.json';
 
 if (!fs.existsSync(DB_FILE)) {
     fs.writeFileSync(DB_FILE, JSON.stringify([]));
 }
 
-// Low-RAM Optimized Settings for Render Free Tier (512MB)
+// Ultra Low-RAM Configuration for Render 512MB Limit
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
@@ -23,8 +23,9 @@ const client = new Client({
             '--no-first-run',
             '--no-zygote',
             '--disable-gpu',
+            '--single-process', // 👈 RAM single-thread me use karne ke liye
             '--disable-extensions',
-            '--disable-component-update'
+            '--js-flags="--max-old-space-size=256"' // 👈 V8 JavaScript RAM capped at 256MB
         ]
     }
 });
@@ -112,4 +113,3 @@ function checkAndSendReminders() {
 }
 
 client.initialize();
-              
